@@ -1,0 +1,22 @@
+{
+  "id": "demo",
+  "realm": "demo",
+  "sslRequired": "none",
+  "enabled": true,
+  "users": [
+    {
+      "id": "admin",
+      "email": "admin@demo.com",
+      "username": "demo_admin",
+      "enabled": true,
+      "emailVerified": true,
+      "credentials": [
+        {
+          "temporary": false,
+          "type": "password",
+          "value": "passw0rd"
+        }
+      ]
+    }
+  ]
+}

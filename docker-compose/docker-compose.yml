@@ -1,0 +1,66 @@
+version: '3.7'
+
+networks:
+  vault-demo:
+    ipam:
+      driver: default
+      config:
+        - subnet: "10.5.0.0/16"
+
+services:
+#  vault:
+#    profiles: ["backend"]
+#    depends_on: [ mysql ]
+#    image: hashicorp/vault-enterprise:latest
+#    restart: always
+#    volumes:
+#      - ./vault:/vault/config:rw
+#      - ./vault/audit_logs:/var/log/vault:rw
+#      - /vault/data
+#    ports:
+#      - "8200:8200/tcp"
+#    cap_add:
+#      - IPC_LOCK
+#    container_name: vault
+#    entrypoint: "vault server -config=/vault/config"
+#    environment:
+#      - VAULT_LICENSE=${VAULT_LICENSE}
+#    networks:
+#      - vault-demo
+  postgres:
+    image: postgres
+    container_name: postgres
+    restart: always
+    volumes:
+      - ./postgres/data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: password
+    networks:
+      - vault-demo
+  keycloak:
+    image: quay.io/keycloak/keycloak:22.0.1
+    container_name: keycloak
+    restart: always
+    environment:
+      KC_DB: postgres
+      KC_DB_USERNAME: keycloak
+      KC_DB_PASSWORD: password
+      KC_DB_URL: "jdbc:postgresql://postgres:5432/keycloak"
+      KC_METRICS_ENABLED: true
+      KC_REALM_NAME: vault
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: passw0rd
+    volumes:
+      - ./keycloak/realm.json:/opt/keycloak/data/import/realm.json:ro
+    command: ["start-dev", "--import-realm"]
+    ports:
+      - 8080:8080
+    depends_on:
+      - postgres
+    networks:
+      - vault-demo
+
+
+
