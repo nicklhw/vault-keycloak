@@ -21,6 +21,22 @@
       ]
     }
   ],
+  "roles": {
+    "realm": [
+      {
+        "name": "app-a-owner",
+        "description": "Application A owner role"
+      },
+      {
+        "name": "app-b-owner",
+        "description": "Application B owner role"
+      },
+      {
+        "name": "vault-admin",
+        "description": "Vault administrator"
+      }
+    ]
+  },
   "users": [
     {
       "id": "${VAULT_ADMIN_USERNAME}",
@@ -34,6 +50,43 @@
           "type": "password",
           "value": "${VAULT_ADMIN_PASSWORD}"
         }
+      ],
+      "realmRoles": [
+        "vault-admin"
+      ]
+    },
+    {
+      "id": "johnwick",
+      "email": "johnwick@demo.com",
+      "username": "johnwick",
+      "enabled": true,
+      "emailVerified": true,
+      "credentials": [
+        {
+          "temporary": false,
+          "type": "password",
+          "value": "passw0rd"
+        }
+      ],
+      "realmRoles": [
+        "app-a-owner"
+      ]
+    },
+    {
+      "id": "steverogers",
+      "email": "steverogers@demo.com",
+      "username": "steverogers",
+      "enabled": true,
+      "emailVerified": true,
+      "credentials": [
+        {
+          "temporary": false,
+          "type": "password",
+          "value": "passw0rd"
+        }
+      ],
+      "realmRoles": [
+        "app-b-owner"
       ]
     }
   ]
