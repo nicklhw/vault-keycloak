@@ -1,20 +1,38 @@
 {
-  "id": "demo",
-  "realm": "demo",
+  "id": "${KC_REALM_NAME}",
+  "realm": "${KC_REALM_NAME}",
   "sslRequired": "none",
   "enabled": true,
+  "clients": [
+    {
+      "id": "vault",
+      "clientId": "vault",
+      "name": "vault",
+      "enabled": true,
+      "publicClient": true,
+      "rootUrl": "${VAULT_URL}",
+      "adminUrl": "${VAULT_URL}",
+      "baseUrl": "${VAULT_URL}",
+      "redirectUris": [
+        "${VAULT_URL}/*"
+      ],
+      "webOrigins": [
+        "${VAULT_URL}"
+      ]
+    }
+  ],
   "users": [
     {
-      "id": "admin",
-      "email": "admin@demo.com",
-      "username": "demo_admin",
+      "id": "${VAULT_ADMIN_USERNAME}",
+      "email": "${VAULT_ADMIN_USERNAME}@demo.com",
+      "username": "${VAULT_ADMIN_USERNAME}",
       "enabled": true,
       "emailVerified": true,
       "credentials": [
         {
           "temporary": false,
           "type": "password",
-          "value": "passw0rd"
+          "value": "${VAULT_ADMIN_PASSWORD}"
         }
       ]
     }
