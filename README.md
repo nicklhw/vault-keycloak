@@ -27,4 +27,4 @@ vault login --method=userpass username=admin password=passw0rd
 - [Running Keycload in a container](https://github.com/eabykov/keycloak-compose/tree/main)
 - [Vault OIDC auth method](https://developer.hashicorp.com/vault/tutorials/auth-methods/oidc-auth)
 - [Keycloak server administration guide](https://www.keycloak.org/docs/latest/server_admin/#keycloak-features-and-concepts)
-- [Integrate Keycloak with Vault](https://faun.pub/integrate-keycloak-with-hashicorp-vault-5264a873dd2f)
+- [Integrate Keycloak with Vault](https://github.com/PacoVK/keycloak-vault/tree/master)

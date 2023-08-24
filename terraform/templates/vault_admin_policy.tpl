@@ -47,6 +47,12 @@ path "sys/leases/*"
   capabilities = ["create", "read", "update", "delete", "list", "sudo"]
 }
 
+# Allow managing identities
+path "identity/*"
+{
+  capabilities = ["create", "read", "update", "delete", "list", "sudo"]
+}
+
 # Manage namespaces
 path "sys/namespaces/*" {
   capabilities = ["create", "read", "update", "delete", "list", "sudo"]
