@@ -63,11 +63,11 @@ resource "vault_jwt_auth_backend" "keycloak" {
 }
 
 resource "vault_jwt_auth_backend_role" "default" {
-  backend       = vault_jwt_auth_backend.keycloak.path
-  role_name     = "default"
-  token_ttl     = 3600
-  token_max_ttl = 3600
-
+  backend         = vault_jwt_auth_backend.keycloak.path
+  role_name       = "default"
+  token_ttl       = 3600
+  token_max_ttl   = 3600
+  token_policies  = ["default"]
   bound_audiences = [keycloak_openid_client.openid_client.client_id]
   user_claim      = "email"
   claim_mappings = {
