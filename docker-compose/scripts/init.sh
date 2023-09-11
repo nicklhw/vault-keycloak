@@ -22,17 +22,17 @@ vault operator members
 
 export VAULT_TOKEN=$(cat ${VAULT_INIT_OUTPUT} | jq -r '.root_token')
 
-tput setaf 12 && echo "############## Configure polices on Vault ##############"
+#tput setaf 12 && echo "############## Configure polices on Vault ##############"
+#
+#vault policy write admin ./admin_policy.hcl
+#
+#tput setaf 12 && echo "############## Enable userpass auth on Vault ##############"
+#
+#vault auth enable -max-lease-ttl=1h userpass
+#
+#vault write auth/userpass/users/admin password="passw0rd" policies="admin"
 
-vault policy write admin ./admin_policy.hcl
-
-tput setaf 12 && echo "############## Enable userpass auth on Vault ##############"
-
-vault auth enable -max-lease-ttl=1h userpass
-
-vault write auth/userpass/users/admin password="passw0rd" policies="admin"
-
-tput setaf 12 && echo "############## Enable audit device ##############"
+tput setaf 12 && echo "############## Enable audit devices ##############"
 
 vault audit enable file file_path=/var/log/vault/vault-audit.log mode=744 log_raw=true
 

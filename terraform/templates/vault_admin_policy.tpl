@@ -17,6 +17,12 @@ path "sys/policies/acl/*"
   capabilities = ["create", "read", "update", "delete", "list", "sudo"]
 }
 
+# Deny edit on vault-admin policy
+path "sys/policies/acl/vault-admin"
+{
+  capabilities = ["deny"]
+}
+
 # Enable and manage authentication methods broadly across Vault # Manage auth methods broadly across Vault
 path "auth/*"
 {
@@ -86,22 +92,4 @@ path "sys/init"
 path "sys/config/ui"
 {
   capabilities = ["read", "update", "delete", "list"]
-}
-
-# Allow rekey of unseal keys
-path "sys/rekey/*"
-{
-  capabilities = ["read", "update", "delete", "list"]
-}
-
-# Allow rotation of master key
-path "sys/rotate"
-{
-  capabilities = ["update", "sudo"]
-}
-
-# Allow Vault Seal
-path "sys/seal"
-{
-  capabilities = ["sudo"]
 }
