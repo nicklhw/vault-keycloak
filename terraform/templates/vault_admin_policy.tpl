@@ -1,9 +1,3 @@
-# Read system health check
-path "sys/health"
-{
-  capabilities = ["read", "sudo"]
-}
-
 # Create and manage ACL policies broadly across Vault
 # List existing policies
 path "sys/policies/acl"
@@ -15,12 +9,6 @@ path "sys/policies/acl"
 path "sys/policies/acl/*"
 {
   capabilities = ["create", "read", "update", "delete", "list", "sudo"]
-}
-
-# Deny edit on vault-admin policy
-path "sys/policies/acl/vault-admin"
-{
-  capabilities = ["deny"]
 }
 
 # Enable and manage authentication methods broadly across Vault # Manage auth methods broadly across Vault
@@ -50,7 +38,7 @@ path "secret/*"
 # Allow managing leases
 path "sys/leases/*"
 {
-  capabilities = ["create", "read", "update", "delete", "list", "sudo"]
+  capabilities = ["read", "update", "list"]
 }
 
 # Allow managing identities

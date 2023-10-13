@@ -7,6 +7,21 @@ resource "keycloak_realm" "realm" {
   enabled = true
 }
 
+resource "keycloak_user" "user_sam" {
+  realm_id = keycloak_realm.realm.id
+  username = "sam"
+  enabled  = true
+
+  email      = "sam@domain.com"
+  first_name = "Sam"
+  last_name  = "Greenwood"
+
+  initial_password {
+    value     = "sam"
+    temporary = false
+  }
+}
+
 resource "keycloak_user" "user_nick" {
   realm_id = keycloak_realm.realm.id
   username = "nick"
@@ -20,6 +35,15 @@ resource "keycloak_user" "user_nick" {
     value     = "nick"
     temporary = false
   }
+}
+
+resource "keycloak_user_roles" "sam_roles" {
+  realm_id = keycloak_realm.realm.id
+  user_id  = keycloak_user.user_sam.id
+
+  role_ids = [
+    keycloak_role.vault_super_admin_role.id
+  ]
 }
 
 resource "keycloak_user_roles" "nick_roles" {
@@ -113,6 +137,13 @@ resource "keycloak_role" "vault_admin_role" {
   client_id   = keycloak_openid_client.openid_client.id
   name        = "vault-admin"
   description = "Vault admin role"
+}
+
+resource "keycloak_role" "vault_super_admin_role" {
+  realm_id    = keycloak_realm.realm.id
+  client_id   = keycloak_openid_client.openid_client.id
+  name        = "vault-super-admin"
+  description = "Vault super admin role"
 }
 
 resource "keycloak_role" "app1_owner_role" {
