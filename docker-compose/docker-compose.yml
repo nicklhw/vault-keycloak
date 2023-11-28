@@ -28,6 +28,20 @@ services:
       - VAULT_LICENSE=${VAULT_LICENSE}
     networks:
       - vault-demo
+  vault-agent:
+    depends_on: [vault]
+    image: hashicorp/vault-enterprise:latest
+    restart: always
+    ports:
+      - "8100:8200/tcp"
+    volumes:
+      - ./vault-agent:/vault-agent:rw
+    environment:
+      VAULT_ADDR: "http://vault:8200"
+    container_name: vault-agent
+    entrypoint: "vault agent -config=/vault-agent/vault-agent.hcl"
+    networks:
+      - vault-demo
   postgres:
     image: postgres
     container_name: postgres

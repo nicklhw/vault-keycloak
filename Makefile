@@ -5,7 +5,7 @@ VAULT_INIT_OUTPUT ?= ./docker-compose/scripts/vault.json
 KEYCLOAK_ADMIN_USER ?= admin
 KEYCLOAK_ADMIN_PASSWORD ?= passw0rd
 
-all: clean up-detach init
+all: clean up-detach init tf-apply restart-agent
 
 up-detach:
 	cd docker-compose \
@@ -15,17 +15,22 @@ init:
 	cd docker-compose/scripts \
 	  && ./init.sh
 
-clean:
+clean: tf-destroy docker-down
+
+docker-down:
 	cd docker-compose \
 	&& docker-compose down --volumes --remove-orphans \
 	&& rm -f ./scripts/vault.json
+
+restart-agent:
+	docker restart vault-agent
 
 logs:
 	cd docker-compose \
     && docker-compose logs -f
 
 ui:
-	open http://localhost:7071
+	open http://localhost:8200
 
 tf-fmt:
 	terraform -chdir=./terraform fmt
@@ -37,7 +42,9 @@ tf-apply:
 	terraform -chdir=./terraform init -upgrade
 	terraform -chdir=./terraform apply -auto-approve
 
-
 tf-destroy:
 	terraform -chdir=./terraform destroy -auto-approve
 	cd ./terraform && rm -rf *.terraform *.tfstate *.backup
+
+kv-ui:
+	open ./docker-compose/vault-agent/kv.html

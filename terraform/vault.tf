@@ -181,6 +181,15 @@ resource "vault_policy" "app2_owner_policy" {
   policy    = data.template_file.app2_owner_policy.rendered
 }
 
+data "template_file" "app1_reader_policy" {
+  template = file("${path.module}/templates/app1_reader_policy.tpl")
+}
+
+resource "vault_policy" "app1_reader_policy" {
+  namespace = vault_namespace.demo.path
+  name      = "app1-reader"
+  policy    = data.template_file.app1_reader_policy.rendered
+}
 #------------------------------------------------------------------------------#
 # Vault external groups
 #------------------------------------------------------------------------------#
@@ -197,7 +206,6 @@ resource "vault_identity_group_alias" "vault_super_admin_group_alias" {
   mount_accessor = vault_jwt_auth_backend.keycloak_root.accessor
   canonical_id   = vault_identity_group.vault_super_admin_group.id
 }
-
 
 resource "vault_identity_group" "vault_admin_group" {
   namespace = vault_namespace.demo.path
@@ -251,4 +259,39 @@ resource "vault_identity_group_alias" "app2_owner_group_alias" {
   name           = "app2-owner"
   mount_accessor = vault_jwt_auth_backend.keycloak.accessor
   canonical_id   = vault_identity_group.app2_owner_group.id
+}
+
+resource "vault_auth_backend" "approle" {
+  namespace = vault_namespace.demo.path
+  type      = "approle"
+}
+
+resource "vault_approle_auth_backend_role" "app1" {
+  namespace      = vault_namespace.demo.path
+  backend        = vault_auth_backend.approle.path
+  role_name      = "app1"
+  token_policies = ["app1-reader"]
+}
+
+data "vault_approle_auth_backend_role_id" "app1" {
+  namespace = vault_namespace.demo.path
+  backend   = vault_auth_backend.approle.path
+  role_name = vault_approle_auth_backend_role.app1.role_name
+}
+
+resource "vault_approle_auth_backend_role_secret_id" "app1" {
+  namespace    = vault_namespace.demo.path
+  backend      = vault_auth_backend.approle.path
+  role_name    = vault_approle_auth_backend_role.app1.role_name
+  wrapping_ttl = "5m"
+}
+
+resource "local_file" "approle_id" {
+  content  = data.vault_approle_auth_backend_role_id.app1.role_id
+  filename = "../docker-compose/vault-agent/app1_role_id"
+}
+
+resource "local_file" "approle_secret" {
+  content  = vault_approle_auth_backend_role_secret_id.app1.wrapping_token
+  filename = "../docker-compose/vault-agent/app1_secret_id"
 }
