@@ -18,6 +18,10 @@ make ui
 # Login to Vault as admin
 export VAULT_ADDR=http://localhost:8200
 vault login --method=userpass username=admin password=passw0rd
+
+# Login to KeyCloak UI
+http://localhost:8080
+admin/passw0rd
 ```
 
 # Useful commands
