@@ -43,6 +43,7 @@ tf-apply:
 	terraform -chdir=./terraform apply -auto-approve
 
 tf-destroy:
+	terraform -chdir=./terraform init -upgrade
 	terraform -chdir=./terraform destroy -auto-approve
 	cd ./terraform && rm -rf *.terraform *.tfstate *.backup
 
